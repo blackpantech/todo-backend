@@ -1,5 +1,8 @@
 package com.blackpantech.todo.domain.task;
 
+import com.blackpantech.todo.domain.task.exceptions.DuplicatedTaskTitleException;
+import com.blackpantech.todo.domain.task.exceptions.TaskNotFoundException;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,32 +17,32 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task getTask(final long id) {
+    public Task getTask(final long id) throws TaskNotFoundException {
         return taskRepository.getTask(id);
     }
 
-    public Task createTask(final String title, final LocalDateTime dueDate) {
+    public Task createTask(final String title, final LocalDateTime dueDate) throws DuplicatedTaskTitleException {
         return taskRepository.createTask(title, dueDate);
     }
 
-    public Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate) {
+    public Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate) throws TaskNotFoundException, DuplicatedTaskTitleException {
         return taskRepository.editTask(id, title, done, order, dueDate);
     }
 
-    public boolean deleteTask(final long id) {
-        return taskRepository.deleteTask(id);
+    public void deleteTask(final long id) throws TaskNotFoundException {
+        taskRepository.deleteTask(id);
     }
 
     public List<Task> getAllTasks() {
         return taskRepository.getAllTasks();
     }
 
-    public boolean deleteAllTasks() {
-        return taskRepository.deleteAllTasks();
+    public void deleteAllTasks() {
+        taskRepository.deleteAllTasks();
     }
 
-    public boolean deleteAllCompletedTasks() {
-        return taskRepository.deleteAllCompletedTasks();
+    public void deleteAllCompletedTasks() {
+        taskRepository.deleteAllCompletedTasks();
     }
 
 }

@@ -8,9 +8,8 @@ import java.time.LocalDateTime;
  * @param title task title
  * @param done completion of the task
  * @param order task position in list
- * @param url task URL
  * @param dueDate task due date
  */
-public record Task(long id, String title, boolean done, long order, String url, LocalDateTime dueDate) {
+public record Task(long id, String title, boolean done, long order, LocalDateTime dueDate) {
 
 }

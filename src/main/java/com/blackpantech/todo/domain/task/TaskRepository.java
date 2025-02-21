@@ -1,5 +1,8 @@
 package com.blackpantech.todo.domain.task;
 
+import com.blackpantech.todo.domain.task.exceptions.DuplicatedTaskTitleException;
+import com.blackpantech.todo.domain.task.exceptions.TaskNotFoundException;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,18 +11,18 @@ import java.util.List;
  */
 public interface TaskRepository {
 
-    Task getTask(final long id);
+    Task getTask(final long id) throws TaskNotFoundException;
 
-    Task createTask(final String title, final LocalDateTime dueDate);
+    Task createTask(final String title, final LocalDateTime dueDate) throws DuplicatedTaskTitleException;
 
-    Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate);
+    Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate) throws DuplicatedTaskTitleException, TaskNotFoundException;
 
-    boolean deleteTask(final long id);
+    void deleteTask(final long id) throws TaskNotFoundException;
 
     List<Task> getAllTasks();
 
-    boolean deleteAllTasks();
+    void deleteAllTasks();
 
-    boolean deleteAllCompletedTasks();
+    void deleteAllCompletedTasks();
 
 }
