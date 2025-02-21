@@ -3,10 +3,12 @@ package com.blackpantech.todo.infra.jpa;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "TASKS")
 public class TaskEntity {
 
     @Id
@@ -19,15 +21,12 @@ public class TaskEntity {
 
     private long orderPosition;
 
-    private String url;
-
     private LocalDateTime dueDate;
 
-    public TaskEntity(String title, boolean done, long orderPosition, String url, LocalDateTime dueDate) {
+    public TaskEntity(String title, boolean done, long orderPosition, LocalDateTime dueDate) {
         this.title = title;
         this.done = done;
         this.orderPosition = orderPosition;
-        this.url = url;
         this.dueDate = dueDate;
     }
 
@@ -39,20 +38,32 @@ public class TaskEntity {
         return dueDate;
     }
 
-    public String getUrl() {
-        return url;
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
     }
 
     public long getOrderPosition() {
         return orderPosition;
     }
 
+    public void setOrderPosition(long orderPosition) {
+        this.orderPosition = orderPosition;
+    }
+
     public boolean isDone() {
         return done;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public long getId() {
