@@ -1,10 +1,8 @@
 package com.blackpantech.todo.domain.task;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -13,20 +11,22 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@ExtendWith(MockitoExtension.class)
 public class TaskServiceTest {
 
     @Mock
-    TaskRepository taskRepository;
+    final TaskRepository taskRepository = mock(TaskRepository.class);
 
-    TaskService taskService = new TaskService(taskRepository);
+    final TaskService taskService = new TaskService(taskRepository);
 
-    Task taskExample = new Task(1, "title sample", false, 1,"my.url.com/1", LocalDateTime.now());
-    Task newTaskExample = new Task(2, "new title", false, 2,"my.url.com/2", null);
-    Task editedTaskExample = new Task(2, "edited title", true, 2,"my.url.com/2", null);
+    final Task taskExample = new Task(1, "title sample", false, 1,"my.url.com/1", LocalDateTime.now());
+
+    final Task newTaskExample = new Task(2, "new title", false, 2,"my.url.com/2", null);
+
+    final Task editedTaskExample = new Task(2, "edited title", true, 2,"my.url.com/2", null);
 
     @Test
     void shouldGetTask() {

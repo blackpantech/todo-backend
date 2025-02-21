@@ -1,7 +1,6 @@
 package com.blackpantech.todo.domain.task;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,31 +15,31 @@ public class TaskService {
     }
 
     public Task getTask(final long id) {
-        return new Task(0, "", false, 1, "", LocalDateTime.now());
+        return taskRepository.getTask(id);
     }
 
     public Task createTask(final String title, final LocalDateTime dueDate) {
-        return new Task(0, title, false, 0, "", dueDate);
+        return taskRepository.createTask(title, dueDate);
     }
 
     public Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate) {
-        return new Task(id, title, done, order, "", dueDate);
+        return taskRepository.editTask(id, title, done, order, dueDate);
     }
 
     public boolean deleteTask(final long id) {
-        return false;
+        return taskRepository.deleteTask(id);
     }
 
     public List<Task> getAllTasks() {
-        return new ArrayList<>();
+        return taskRepository.getAllTasks();
     }
 
     public boolean deleteAllTasks() {
-        return false;
+        return taskRepository.deleteAllTasks();
     }
 
     public boolean deleteAllCompletedTasks() {
-        return false;
+        return taskRepository.deleteAllCompletedTasks();
     }
 
 }
