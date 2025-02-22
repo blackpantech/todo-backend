@@ -1,5 +1,6 @@
 package com.blackpantech.todo.infra.jpa;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -15,12 +16,16 @@ public class TaskEntity {
     @GeneratedValue
     private long id;
 
+    @Column(name = "TITLE")
     private String title;
 
+    @Column(name = "DONE")
     private boolean done;
 
+    @Column(name = "ORDER_POSITION")
     private long orderPosition;
 
+    @Column(name = "DUE_DATE")
     private LocalDateTime dueDate;
 
     public TaskEntity(String title, boolean done, long orderPosition, LocalDateTime dueDate) {
