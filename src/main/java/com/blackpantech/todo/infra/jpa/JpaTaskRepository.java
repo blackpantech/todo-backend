@@ -31,7 +31,7 @@ public class JpaTaskRepository implements TaskRepository {
 
     @Override
     public Task createTask(final String title, final LocalDateTime dueDate) throws DuplicatedTaskTitleException {
-        final TaskEntity taskToCreate = getTaskWithUniqueTitle(title, dueDate);
+        final TaskEntity taskToCreate = getNewTaskWithUniqueTitle(title, dueDate);
 
         final TaskEntity createdTask = taskJpaRepository.save(taskToCreate);
 
@@ -39,11 +39,15 @@ public class JpaTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate)
+    public Task editTask(final long id,
+                         final String title,
+                         final boolean done,
+                         final long order,
+                         final LocalDateTime dueDate)
             throws DuplicatedTaskTitleException, TaskNotFoundException {
         final TaskEntity taskToEdit = findTaskById(id);
 
-        final TaskEntity editedTask = taskJpaRepository.save(getTaskWithUniqueTitle(taskToEdit, title, done, order, dueDate));
+        final TaskEntity editedTask = taskJpaRepository.save(getEditedTaskWithUniqueTitle(taskToEdit, title, done, order, dueDate));
 
         return taskEntityMapper.TaskEntityToTask(editedTask);
     }
@@ -72,6 +76,15 @@ public class JpaTaskRepository implements TaskRepository {
         taskJpaRepository.deleteAllCompletedTasks();
     }
 
+    /**
+     * Finds task with given ID
+     *
+     * @param id ID to look for
+     *
+     * @return task with given ID
+     *
+     * @throws TaskNotFoundException if no task was found
+     */
     private TaskEntity findTaskById(final long id) throws TaskNotFoundException {
         final Optional<TaskEntity> optionalTaskEntity = taskJpaRepository.findById(id);
 
@@ -82,29 +95,92 @@ public class JpaTaskRepository implements TaskRepository {
         return optionalTaskEntity.get();
     }
 
-    private TaskEntity getTaskWithUniqueTitle(final String title, final LocalDateTime dueDate) throws DuplicatedTaskTitleException {
-        final Optional<TaskEntity> optionalTaskEntity = taskJpaRepository.findByTitle(title);
+    /**
+     * Gets a new task with a unique title
+     *
+     * @param title title of the new task
+     * @param dueDate due date of the new task
+     *
+     * @return new task with given attributes
+     *
+     * @throws DuplicatedTaskTitleException if given title is already taken
+     */
+    private TaskEntity getNewTaskWithUniqueTitle(final String title, final LocalDateTime dueDate)
+            throws DuplicatedTaskTitleException {
+        final String uniqueTitle = getUniqueTitle(title);
 
-        if (optionalTaskEntity.isPresent()) {
-            throw new DuplicatedTaskTitleException(title);
-        }
+        final long order = taskJpaRepository.count() + 1;
 
-        return new TaskEntity(title, false, taskJpaRepository.count() + 1, dueDate);
+        return new TaskEntity(uniqueTitle, false, order, dueDate);
     }
 
-    private TaskEntity getTaskWithUniqueTitle(final TaskEntity taskToEdit, final String title, final boolean done, final long order, final LocalDateTime dueDate) throws DuplicatedTaskTitleException {
-        final Optional<TaskEntity> optionalTaskEntity = taskJpaRepository.findByTitle(title);
-
-        if (optionalTaskEntity.isPresent() && !optionalTaskEntity.get().getTitle().equals(title)) {
-            throw new DuplicatedTaskTitleException(title);
+    /**
+     * Edits a given task with a unique title
+     *
+     * @param taskToEdit task to edit
+     * @param title edited task title
+     * @param done edited task completion
+     * @param order edited task position in list
+     * @param dueDate edited due date
+     *
+     * @return edited task with a unique title
+     *
+     * @throws DuplicatedTaskTitleException if edited task title is not unique
+     */
+    private TaskEntity getEditedTaskWithUniqueTitle(final TaskEntity taskToEdit,
+                                                    final String title,
+                                                    final boolean done,
+                                                    final long order,
+                                                    final LocalDateTime dueDate)
+            throws DuplicatedTaskTitleException {
+        if (!taskToEdit.getTitle().equals(title)) {
+            return editGivenTask(taskToEdit, getUniqueTitle(title), done, order, dueDate);
+        } else {
+            return editGivenTask(taskToEdit, title, done, order, dueDate);
         }
+    }
 
+    /**
+     * Edits a given task with given attributes
+     *
+     * @param taskToEdit task to edit
+     * @param title edited task title
+     * @param done edited task completion
+     * @param order edited task position in list
+     * @param dueDate edited due date
+     *
+     * @return edited task
+     */
+    private TaskEntity editGivenTask(final TaskEntity taskToEdit,
+                                     final String title,
+                                     final boolean done,
+                                     final long order,
+                                     final LocalDateTime dueDate) {
         taskToEdit.setTitle(title);
         taskToEdit.setDone(done);
         taskToEdit.setOrderPosition(order);
         taskToEdit.setDueDate(dueDate);
 
         return taskToEdit;
+    }
+
+    /**
+     * Gets unique title or throws exception if given title is not unique
+     *
+     * @param title given title
+     *
+     * @return unique task title
+     *
+     * @throws DuplicatedTaskTitleException if given title is not unique
+     */
+    private String getUniqueTitle(final String title) throws DuplicatedTaskTitleException {
+        final Optional<TaskEntity> optionalTaskEntity = taskJpaRepository.findByTitle(title);
+
+        if (optionalTaskEntity.isPresent()) {
+            throw new DuplicatedTaskTitleException(title);
+        }
+
+        return title;
     }
 
 }
