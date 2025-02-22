@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * Domain record for task objects
+ *
  * @param id task id
  * @param title task title
  * @param done completion of the task
