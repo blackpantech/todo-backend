@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * HTTP REST controller to interact with tasks
+ */
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -31,6 +34,15 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    /**
+     * Gets task with given ID
+     *
+     * @param id ID to look for
+     *
+     * @return task with given ID
+     *
+     * @throws TaskNotFoundException if no task with given ID was found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable("id") final long id) throws TaskNotFoundException {
         return ResponseEntity
@@ -38,6 +50,15 @@ public class TaskController {
                 .body(taskService.getTask(id));
     }
 
+    /**
+     * Creates new task with given title and due date
+     *
+     * @param taskToCreate new task properties
+     *
+     * @return created task
+     *
+     * @throws DuplicatedTaskTitleException if the given title is already taken
+     */
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody @Valid TaskToCreateRequest taskToCreate)throws DuplicatedTaskTitleException {
         return ResponseEntity
@@ -45,6 +66,17 @@ public class TaskController {
                 .body(taskService.createTask(taskToCreate.title(), taskToCreate.dueDate()));
     }
 
+    /**
+     * Edits task with given ID and new properties
+     *
+     * @param id ID to look for
+     * @param taskToEdit edited task properties
+     *
+     * @return edited task
+     *
+     * @throws DuplicatedTaskTitleException if the given title is already taken
+     * @throws TaskNotFoundException if no task with given ID was found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Task> editTask(@PathVariable("id") final long id,
                          @RequestBody @Valid final TaskToEditRequest taskToEdit)
@@ -58,18 +90,35 @@ public class TaskController {
                         taskToEdit.dueDate()));
     }
 
+    /**
+     * Deletes a tasks with given ID
+     *
+     * @param id ID to look for
+     *
+     * @throws TaskNotFoundException if no task with given ID was found
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTask(@PathVariable("id") final long id) throws TaskNotFoundException {
         taskService.deleteTask(id);
     }
 
+    /**
+     * Gets all tasks
+     *
+     * @return list of all tasks
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Task> getAllTasks() {
         return taskService.getAllTasks();
     }
 
+    /**
+     * Deletes all tasks or all completed tasks
+     *
+     * @param completed optional request parameter to select completed tasks
+     */
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllTasks(@RequestParam(required = false) final boolean completed) {
@@ -80,6 +129,11 @@ public class TaskController {
         }
     }
 
+    /**
+     * Exception handler for DuplicatedTaskTitleException
+     *
+     * @return 409 Conflict status
+     */
     @ExceptionHandler(DuplicatedTaskTitleException.class)
     ResponseEntity<?> handleDuplicatedTaskTitleException() {
         return ResponseEntity
@@ -87,6 +141,11 @@ public class TaskController {
                 .build();
     }
 
+    /**
+     * Exception handler for TaskNotFoundException
+     *
+     * @return 404 Not Found status
+     */
     @ExceptionHandler(TaskNotFoundException.class)
     ResponseEntity<?> handleTaskNotFoundException() {
         return ResponseEntity

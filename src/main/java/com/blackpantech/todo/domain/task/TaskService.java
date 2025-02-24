@@ -45,7 +45,7 @@ public class TaskService {
     }
 
     /**
-     * Edits task with given ID with new properties
+     * Edits task with given ID and new properties
      *
      * @param id ID to look for
      * @param title edited title
@@ -79,7 +79,7 @@ public class TaskService {
     }
 
     /**
-     * Gets all the tasks
+     * Gets all tasks
      *
      * @return list of all tasks
      */
