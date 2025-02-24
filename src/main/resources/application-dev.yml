@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:todo
+    username: dev
+    password: dev
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+sql:
+  init:
+    platform: h2

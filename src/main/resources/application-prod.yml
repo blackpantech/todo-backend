@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/todo
+    username: todo
+    password: todo
+    driverClassName: org.postgresql.Driver
+
+sql:
+  init:
+    platform: postgresql
