@@ -3,7 +3,6 @@ package com.blackpantech.todo.infra.jpa;
 import com.blackpantech.todo.domain.task.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -12,8 +11,6 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface TaskEntityMapper {
-
-    TaskEntityMapper INSTANCE = Mappers.getMapper(TaskEntityMapper.class);
 
     /**
      * Mapper JPA Task Object -> Domain Task Object
