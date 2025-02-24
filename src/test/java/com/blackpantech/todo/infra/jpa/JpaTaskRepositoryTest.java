@@ -88,7 +88,7 @@ public class JpaTaskRepositoryTest {
         jpaTaskRepository.deleteTask(1);
 
         verify(taskJpaRepository).findById(1L);
-        verify(taskJpaRepository).deleteById(1L);
+        verify(taskJpaRepository).delete(newTaskEntityExample);
         verifyNoMoreInteractions(taskJpaRepository);
     }
 
