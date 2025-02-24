@@ -9,7 +9,7 @@ public interface TaskJpaRepository extends JpaRepository<TaskEntity, Long> {
 
     Optional<TaskEntity> findByTitle(final String title);
 
-    @Query("delete from TaskEntity task where task.done = true")
+    @Query("delete from TaskEntity task where task.completed = true")
     void deleteAllCompletedTasks();
 
 }

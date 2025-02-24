@@ -19,8 +19,8 @@ public class TaskEntity {
     @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "DONE")
-    private boolean done;
+    @Column(name = "COMPLETED")
+    private boolean completed;
 
     @Column(name = "ORDER_POSITION")
     private long orderPosition;
@@ -28,9 +28,9 @@ public class TaskEntity {
     @Column(name = "DUE_DATE")
     private LocalDateTime dueDate;
 
-    public TaskEntity(String title, boolean done, long orderPosition, LocalDateTime dueDate) {
+    public TaskEntity(String title, boolean completed, long orderPosition, LocalDateTime dueDate) {
         this.title = title;
-        this.done = done;
+        this.completed = completed;
         this.orderPosition = orderPosition;
         this.dueDate = dueDate;
     }
@@ -55,12 +55,12 @@ public class TaskEntity {
         this.orderPosition = orderPosition;
     }
 
-    public boolean isDone() {
-        return done;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getTitle() {

@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * JPA implementation of the task repository
+ */
 @Repository
 public class JpaTaskRepository implements TaskRepository {
 
@@ -24,7 +27,7 @@ public class JpaTaskRepository implements TaskRepository {
 
     @Override
     public Task getTask(final long id) throws TaskNotFoundException {
-        TaskEntity task = findTaskById(id);
+        final TaskEntity task = getTaskById(id);
 
         return taskEntityMapper.TaskEntityToTask(task);
     }
@@ -41,24 +44,22 @@ public class JpaTaskRepository implements TaskRepository {
     @Override
     public Task editTask(final long id,
                          final String title,
-                         final boolean done,
+                         final boolean completed,
                          final long order,
                          final LocalDateTime dueDate)
             throws DuplicatedTaskTitleException, TaskNotFoundException {
-        final TaskEntity taskToEdit = findTaskById(id);
+        final TaskEntity taskToEdit = getTaskById(id);
 
-        final TaskEntity editedTask = taskJpaRepository.save(getEditedTaskWithUniqueTitle(taskToEdit, title, done, order, dueDate));
+        final TaskEntity editedTaskToSave = getEditedTaskWithUniqueTitle(taskToEdit, title, completed, order, dueDate);
+
+        final TaskEntity editedTask = taskJpaRepository.save(editedTaskToSave);
 
         return taskEntityMapper.TaskEntityToTask(editedTask);
     }
 
     @Override
     public void deleteTask(final long id) throws TaskNotFoundException {
-        if (taskJpaRepository.findById(id).isEmpty()) {
-            throw new TaskNotFoundException(id);
-        }
-
-        taskJpaRepository.deleteById(id);
+        taskJpaRepository.delete(getTaskById(id));
     }
 
     @Override
@@ -77,7 +78,7 @@ public class JpaTaskRepository implements TaskRepository {
     }
 
     /**
-     * Finds task with given ID
+     * Gets task with given ID
      *
      * @param id ID to look for
      *
@@ -85,7 +86,7 @@ public class JpaTaskRepository implements TaskRepository {
      *
      * @throws TaskNotFoundException if no task was found
      */
-    private TaskEntity findTaskById(final long id) throws TaskNotFoundException {
+    private TaskEntity getTaskById(final long id) throws TaskNotFoundException {
         final Optional<TaskEntity> optionalTaskEntity = taskJpaRepository.findById(id);
 
         if (optionalTaskEntity.isEmpty()) {
@@ -119,7 +120,7 @@ public class JpaTaskRepository implements TaskRepository {
      *
      * @param taskToEdit task to edit
      * @param title edited task title
-     * @param done edited task completion
+     * @param completed edited task completion
      * @param order edited task position in list
      * @param dueDate edited due date
      *
@@ -129,14 +130,14 @@ public class JpaTaskRepository implements TaskRepository {
      */
     private TaskEntity getEditedTaskWithUniqueTitle(final TaskEntity taskToEdit,
                                                     final String title,
-                                                    final boolean done,
+                                                    final boolean completed,
                                                     final long order,
                                                     final LocalDateTime dueDate)
             throws DuplicatedTaskTitleException {
         if (!taskToEdit.getTitle().equals(title)) {
-            return editGivenTask(taskToEdit, getUniqueTitle(title), done, order, dueDate);
+            return editGivenTask(taskToEdit, getUniqueTitle(title), completed, order, dueDate);
         } else {
-            return editGivenTask(taskToEdit, title, done, order, dueDate);
+            return editGivenTask(taskToEdit, title, completed, order, dueDate);
         }
     }
 
@@ -145,7 +146,7 @@ public class JpaTaskRepository implements TaskRepository {
      *
      * @param taskToEdit task to edit
      * @param title edited task title
-     * @param done edited task completion
+     * @param completed edited task completion
      * @param order edited task position in list
      * @param dueDate edited due date
      *
@@ -153,11 +154,11 @@ public class JpaTaskRepository implements TaskRepository {
      */
     private TaskEntity editGivenTask(final TaskEntity taskToEdit,
                                      final String title,
-                                     final boolean done,
+                                     final boolean completed,
                                      final long order,
                                      final LocalDateTime dueDate) {
         taskToEdit.setTitle(title);
-        taskToEdit.setDone(done);
+        taskToEdit.setCompleted(completed);
         taskToEdit.setOrderPosition(order);
         taskToEdit.setDueDate(dueDate);
 

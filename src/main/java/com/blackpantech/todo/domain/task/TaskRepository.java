@@ -39,7 +39,7 @@ public interface TaskRepository {
      *
      * @param id ID to look for
      * @param title edited title
-     * @param done edited completion of the task
+     * @param completed edited completion of the task
      * @param order edited position of the task in the list
      * @param dueDate edited due date
      *
@@ -48,7 +48,7 @@ public interface TaskRepository {
      * @throws DuplicatedTaskTitleException if the given title is already taken
      * @throws TaskNotFoundException if no task with given ID was found
      */
-    Task editTask(final long id, final String title, final boolean done, final long order, final LocalDateTime dueDate)
+    Task editTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate)
             throws DuplicatedTaskTitleException, TaskNotFoundException;
 
     /**

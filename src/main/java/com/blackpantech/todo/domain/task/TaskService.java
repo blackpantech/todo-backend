@@ -49,7 +49,7 @@ public class TaskService {
      *
      * @param id ID to look for
      * @param title edited title
-     * @param done edited completion of the task
+     * @param completed edited completion of the task
      * @param order edited position of the task in the list
      * @param dueDate edited due date
      *
@@ -60,11 +60,11 @@ public class TaskService {
      */
     public Task editTask(final long id,
                          final String title,
-                         final boolean done,
+                         final boolean completed,
                          final long order,
                          final LocalDateTime dueDate)
             throws TaskNotFoundException, DuplicatedTaskTitleException {
-        return taskRepository.editTask(id, title, done, order, dueDate);
+        return taskRepository.editTask(id, title, completed, order, dueDate);
     }
 
     /**

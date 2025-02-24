@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
  *
  * @param id task id
  * @param title task title
- * @param done completion of the task
+ * @param completed completion of the task
  * @param order task position in list
  * @param dueDate task due date
  */
-public record Task(long id, String title, boolean done, long order, LocalDateTime dueDate) {
+public record Task(long id, String title, boolean completed, long order, LocalDateTime dueDate) {
 
 }
