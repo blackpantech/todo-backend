@@ -38,7 +38,12 @@ public class JpaTaskRepositoryTest {
             "0, title, false, 1, 2025-08-23T22:00:00"
     })
     @DisplayName("should get a single task")
-    void shouldGetTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException {
+    void shouldGetTask(final long id,
+                       final String title,
+                       final boolean completed,
+                       final long order,
+                       final LocalDateTime dueDate)
+            throws TaskNotFoundException {
         final TaskEntity task = new TaskEntity(title, completed, order, dueDate);
         when(taskJpaRepository.findById(id)).thenReturn(Optional.of(task));
 
@@ -109,7 +114,12 @@ public class JpaTaskRepositoryTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should edit a task")
-    void shouldEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException, DuplicatedTaskTitleException {
+    void shouldEditTask(final long id,
+                        final String title,
+                        final boolean completed,
+                        final long order,
+                        final LocalDateTime dueDate)
+            throws TaskNotFoundException, DuplicatedTaskTitleException {
         final TaskEntity task = new TaskEntity(title, completed, order, dueDate);
         final String editedTitle = title + " edit";
         when(taskJpaRepository.findByTitle(editedTitle)).thenReturn(Optional.empty());
@@ -134,7 +144,12 @@ public class JpaTaskRepositoryTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should edit a task but keep the same title")
-    void shouldEditTask_withSameTitle(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException, DuplicatedTaskTitleException {
+    void shouldEditTask_withSameTitle(final long id,
+                                      final String title,
+                                      final boolean completed,
+                                      final long order,
+                                      final LocalDateTime dueDate)
+            throws TaskNotFoundException, DuplicatedTaskTitleException {
         final TaskEntity task = new TaskEntity(title, completed, order, dueDate);
         when(taskJpaRepository.findById(id)).thenReturn(Optional.of(task));
         when(taskJpaRepository.save(any())).thenReturn(task);
@@ -156,13 +171,18 @@ public class JpaTaskRepositoryTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should find task with the same title when creating a task")
-    void shouldFindExistingTitle_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) {
+    void shouldFindExistingTitle_whenEditTask(final long id,
+                                              final String title,
+                                              final boolean completed,
+                                              final long order,
+                                              final LocalDateTime dueDate) {
         final TaskEntity task = new TaskEntity(title, completed, order, dueDate);
         final String editedTitle = title + " edit";
         when(taskJpaRepository.findById(id)).thenReturn(Optional.of(task));
         when(taskJpaRepository.findByTitle(editedTitle)).thenReturn(Optional.of(new TaskEntity()));
 
-        assertThrows(DuplicatedTaskTitleException.class, () -> jpaTaskRepository.editTask(id, editedTitle, completed, order, dueDate));
+        assertThrows(DuplicatedTaskTitleException.class,
+                () -> jpaTaskRepository.editTask(id, editedTitle, completed, order, dueDate));
 
         verify(taskJpaRepository).findById(id);
         verify(taskJpaRepository).findByTitle(editedTitle);
@@ -175,10 +195,15 @@ public class JpaTaskRepositoryTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should not find task when editing a task")
-    void shouldNotFindTask_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) {
+    void shouldNotFindTask_whenEditTask(final long id,
+                                        final String title,
+                                        final boolean completed,
+                                        final long order,
+                                        final LocalDateTime dueDate) {
         when(taskJpaRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(TaskNotFoundException.class, () -> jpaTaskRepository.editTask(id, title, completed, order, dueDate));
+        assertThrows(TaskNotFoundException.class,
+                () -> jpaTaskRepository.editTask(id, title, completed, order, dueDate));
 
         verify(taskJpaRepository).findById(id);
         verifyNoMoreInteractions(taskJpaRepository);

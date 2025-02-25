@@ -51,7 +51,12 @@ public class TaskControllerTest {
             "0, title, false, 1, 2025-08-23T22:00:00"
     })
     @DisplayName("should get a single task")
-    void shouldGetTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception {
+    void shouldGetTask(final long id,
+                       final String title,
+                       final boolean completed,
+                       final long order,
+                       final LocalDateTime dueDate)
+            throws Exception {
         final Task task = new Task(id, title, completed, order, dueDate);
         when(taskService.getTask(id)).thenReturn(task);
 
@@ -150,7 +155,12 @@ public class TaskControllerTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should edit a task")
-    void shouldEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception{
+    void shouldEditTask(final long id,
+                        final String title,
+                        final boolean completed,
+                        final long order,
+                        final LocalDateTime dueDate)
+            throws Exception{
         Task expectedTask = new Task(id, title, completed, order, dueDate);
         TaskToEditRequest taskToEditRequest = new TaskToEditRequest(title, completed, order, dueDate);
         when(taskService.editTask(id, title, completed, order, dueDate)).thenReturn(expectedTask);
@@ -174,8 +184,14 @@ public class TaskControllerTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should return 409 when editing a task")
-    void shouldFindDuplicatedTitle_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception {
-        when(taskService.editTask(id, title, completed, order, dueDate)).thenThrow(new DuplicatedTaskTitleException(title));
+    void shouldFindDuplicatedTitle_whenEditTask(final long id,
+                                                final String title,
+                                                final boolean completed,
+                                                final long order,
+                                                final LocalDateTime dueDate)
+            throws Exception {
+        when(taskService.editTask(id, title, completed, order, dueDate))
+                .thenThrow(new DuplicatedTaskTitleException(title));
         TaskToEditRequest taskToEditRequest = new TaskToEditRequest(title, completed, order, dueDate);
 
         mockMvc.perform(put("/tasks/{id}", id)
@@ -195,7 +211,12 @@ public class TaskControllerTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should return 404 when editing a task")
-    void shouldReturnNotFound_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception {
+    void shouldReturnNotFound_whenEditTask(final long id,
+                                           final String title,
+                                           final boolean completed,
+                                           final long order,
+                                           final LocalDateTime dueDate)
+            throws Exception {
         when(taskService.editTask(id, title, completed, order, dueDate)).thenThrow(new TaskNotFoundException(id));
         TaskToEditRequest taskToEditRequest = new TaskToEditRequest(title, completed, order, dueDate);
 
@@ -216,7 +237,12 @@ public class TaskControllerTest {
             "1,   , true, 1, 2025-02-24T13:30:00",
     })
     @DisplayName("should return 400 when editing a task")
-    void shouldReturnBadRequest_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception {
+    void shouldReturnBadRequest_whenEditTask(final long id,
+                                             final String title,
+                                             final boolean completed,
+                                             final long order,
+                                             final LocalDateTime dueDate)
+            throws Exception {
         TaskToEditRequest taskToEditRequest = new TaskToEditRequest(title, completed, order, dueDate);
 
         mockMvc.perform(put("/tasks/{id}", id)
@@ -261,7 +287,12 @@ public class TaskControllerTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should get all tasks")
-    void shouldGetAllTasks(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws Exception {
+    void shouldGetAllTasks(final long id,
+                           final String title,
+                           final boolean completed,
+                           final long order,
+                           final LocalDateTime dueDate)
+            throws Exception {
         final List<Task> tasks = Collections.singletonList(new Task(id, title, completed, order, dueDate));
         when(taskService.getAllTasks()).thenReturn(tasks);
 

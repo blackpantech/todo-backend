@@ -48,7 +48,11 @@ public interface TaskRepository {
      * @throws DuplicatedTaskTitleException if the given title is already taken
      * @throws TaskNotFoundException if no task with given ID was found
      */
-    Task editTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate)
+    Task editTask(final long id,
+                  final String title,
+                  final boolean completed,
+                  final long order,
+                  final LocalDateTime dueDate)
             throws DuplicatedTaskTitleException, TaskNotFoundException;
 
     /**

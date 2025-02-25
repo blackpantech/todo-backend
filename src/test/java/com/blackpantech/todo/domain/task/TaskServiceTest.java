@@ -35,7 +35,12 @@ public class TaskServiceTest {
             "0, title, false, 1, 2025-08-23T22:00:00"
     })
     @DisplayName("should get a single task")
-    void shouldGetTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException {
+    void shouldGetTask(final long id,
+                       final String title,
+                       final boolean completed,
+                       final long order,
+                       final LocalDateTime dueDate)
+            throws TaskNotFoundException {
         final Task task = new Task(id, title, completed, order, dueDate);
         when(taskRepository.getTask(id)).thenReturn(task);
 
@@ -81,7 +86,8 @@ public class TaskServiceTest {
             "title2, 2025-02-24T13:30:00"
     })
     @DisplayName("should find task with the same title when creating a task")
-    void shouldFindExistingTitle_whenCreateTask(final String title, final LocalDateTime dueDate) throws DuplicatedTaskTitleException {
+    void shouldFindExistingTitle_whenCreateTask(final String title, final LocalDateTime dueDate)
+            throws DuplicatedTaskTitleException {
         doThrow(new DuplicatedTaskTitleException(title)).when(taskRepository).createTask(title, dueDate);
 
         assertThrows(DuplicatedTaskTitleException.class, () -> taskService.createTask(title, dueDate));
@@ -96,7 +102,12 @@ public class TaskServiceTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should edit a task")
-    void shouldEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException, DuplicatedTaskTitleException {
+    void shouldEditTask(final long id,
+                        final String title,
+                        final boolean completed,
+                        final long order,
+                        final LocalDateTime dueDate)
+            throws TaskNotFoundException, DuplicatedTaskTitleException {
         final Task task = new Task(id, title, completed, order, dueDate);
         when(taskRepository.editTask(id, title, completed, order, dueDate)).thenReturn(task);
 
@@ -113,10 +124,17 @@ public class TaskServiceTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should find task with the same title when creating a task")
-    void shouldFindExistingTitle_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws DuplicatedTaskTitleException, TaskNotFoundException {
-        doThrow(new DuplicatedTaskTitleException(title)).when(taskRepository).editTask(id, title, completed, order, dueDate);
+    void shouldFindExistingTitle_whenEditTask(final long id,
+                                              final String title,
+                                              final boolean completed,
+                                              final long order,
+                                              final LocalDateTime dueDate)
+            throws DuplicatedTaskTitleException, TaskNotFoundException {
+        doThrow(new DuplicatedTaskTitleException(title))
+                .when(taskRepository).editTask(id, title, completed, order, dueDate);
 
-        assertThrows(DuplicatedTaskTitleException.class, () -> taskService.editTask(id, title, completed, order, dueDate));
+        assertThrows(DuplicatedTaskTitleException.class,
+                () -> taskService.editTask(id, title, completed, order, dueDate));
 
         verify(taskRepository).editTask(id, title, completed, order, dueDate);
         verifyNoMoreInteractions(taskRepository);
@@ -128,7 +146,12 @@ public class TaskServiceTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should not find task when editing a task")
-    void shouldNotFindTask_whenEditTask(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) throws TaskNotFoundException, DuplicatedTaskTitleException {
+    void shouldNotFindTask_whenEditTask(final long id,
+                                        final String title,
+                                        final boolean completed,
+                                        final long order,
+                                        final LocalDateTime dueDate)
+            throws TaskNotFoundException, DuplicatedTaskTitleException {
         doThrow(new TaskNotFoundException(id)).when(taskRepository).editTask(id, title, completed, order, dueDate);
 
         assertThrows(TaskNotFoundException.class, () -> taskService.editTask(id, title, completed, order, dueDate));
@@ -165,7 +188,11 @@ public class TaskServiceTest {
             "1, title2, true, 1, 2025-02-24T13:30:00"
     })
     @DisplayName("should get all tasks")
-    void shouldGetAllTasks(final long id, final String title, final boolean completed, final long order, final LocalDateTime dueDate) {
+    void shouldGetAllTasks(final long id,
+                           final String title,
+                           final boolean completed,
+                           final long order,
+                           final LocalDateTime dueDate) {
         final List<Task> tasks = Collections.singletonList(new Task(id, title, completed, order, dueDate));
         when(taskRepository.getAllTasks()).thenReturn(tasks);
 

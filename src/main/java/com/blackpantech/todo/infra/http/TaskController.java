@@ -60,7 +60,8 @@ public class TaskController {
      * @throws DuplicatedTaskTitleException if the given title is already taken
      */
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody @Valid TaskToCreateRequest taskToCreate)throws DuplicatedTaskTitleException {
+    public ResponseEntity<Task> createTask(@RequestBody @Valid final TaskToCreateRequest taskToCreate)
+            throws DuplicatedTaskTitleException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(taskService.createTask(taskToCreate.title(), taskToCreate.dueDate()));
@@ -79,15 +80,19 @@ public class TaskController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Task> editTask(@PathVariable("id") final long id,
-                         @RequestBody @Valid final TaskToEditRequest taskToEdit)
+                                         @RequestBody @Valid final TaskToEditRequest taskToEdit)
             throws TaskNotFoundException, DuplicatedTaskTitleException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(taskService.editTask(id,
-                        taskToEdit.title(),
-                        taskToEdit.completed(),
-                        taskToEdit.order(),
-                        taskToEdit.dueDate()));
+                .body(
+                        taskService.editTask(
+                                id,
+                                taskToEdit.title(),
+                                taskToEdit.completed(),
+                                taskToEdit.order(),
+                                taskToEdit.dueDate()
+                        )
+                );
     }
 
     /**
